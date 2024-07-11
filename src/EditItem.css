@@ -1,0 +1,10 @@
+#editBlock {
+    display: inline-flex;
+
+    align-self:center;
+    justify-self: center;
+    width: auto;
+    height: auto; 
+    z-index: 4;
+    gap: 5px;
+}

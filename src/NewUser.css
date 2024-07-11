@@ -1,0 +1,14 @@
+#cH {
+    margin-bottom: 0px;
+    margin-top: -10px;
+    font-size: 16pt;
+}
+
+#newUser {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 50%;
+    transform: translateX(50%);
+    padding-top: 0px;
+}
