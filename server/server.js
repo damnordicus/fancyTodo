@@ -46,7 +46,7 @@ app.post('/users', async (req, res) => {
 })
 
 app.get('/tasks', async (req, res) => {
-    const tasks = await knex('tasks').select('*');
+    const tasks = await knex('tasks').select('*').join("users", "users.id", "=", "tasks.creator_id");
     if(tasks){
         res.status(200).send(tasks);
     }else{
@@ -65,7 +65,7 @@ app.get('/tasks/creator/:id', async (req, res) => {
 })
 app.post('/tasks/creator/:id', async (req, res) => {
     const id  = parseInt(req.params.id);
-    const { title, creator_id } = req.body;
+    const { title, creator_id, group_id } = req.body;
     let temp = 0;
     if(creator_id === -1){
         temp = id;
@@ -74,7 +74,7 @@ app.post('/tasks/creator/:id', async (req, res) => {
     }
 
     try {
-        await knex('tasks').insert({title: title, is_complete: false, creator_id: temp});
+        await knex('tasks').insert({title: title, is_complete: false, creator_id: temp, group_id: group_id});
         res.status(200).json({message: "Added new task!"});
        
     }catch(error){

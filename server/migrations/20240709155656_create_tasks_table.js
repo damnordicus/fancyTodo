@@ -8,6 +8,7 @@ exports.up = function(knex) {
         table.string('title').notNullable();
         table.string('comments');
         table.boolean('is_complete');
+        table.integer('group_id');
         table.integer('creator_id');
         table.foreign('creator_id').references('users.id').onDelete('CASCADE');
       })

@@ -43,7 +43,8 @@ function AddItem({adminView, userId, setNewTaskVisible, fetchData}) {
                 },
                 body: JSON.stringify({
                     title: taskName,
-                    creator_id: user
+                    creator_id: user,
+                    group_id: group,
                 })
             });
             const data = await newTask.json();
