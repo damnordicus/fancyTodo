@@ -8,7 +8,6 @@ exports.up = function(knex) {
         table.string('title').notNullable();
         table.string('comments');
         table.boolean('is_complete');
-        table.integer('group_id');
         table.integer('creator_id');
         table.foreign('creator_id').references('users.id').onDelete('CASCADE');
       })
@@ -19,9 +18,7 @@ exports.up = function(knex) {
  * @returns { Promise<void> }
  */
 exports.down = function(knex) {
-    return knex.schema.alterTable('tasks', table => {
-        table.dropForeign('creator_id');
-    }).then(function(){
+    
         return knex.schema.dropTableIfExists('tasks');
-    })
+    
 };

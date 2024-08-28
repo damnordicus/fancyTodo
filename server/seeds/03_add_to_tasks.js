@@ -13,4 +13,5 @@ exports.seed = async function(knex) {
     {title: 'test2', comments: 'Possible suggestions', is_complete: false, creator_id: 2, group_id: 1},
     {title: 'test3', comments: 'Possible suggestions', is_complete: true, creator_id: 2, group_id: 1}
   ]);
+  
 };

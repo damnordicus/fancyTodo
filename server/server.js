@@ -119,6 +119,29 @@ app.delete('/tasks/:id', async (req, res) => {
    }
 })
 
+app.patch('/group/:id', async (req, res) => {
+    const id = parseInt(req.params.id);
+    const { posX, posY } = req.body;
+    try{
+        await knex('group').where({group_id: id}).update({ posX: posX, posY: posY});
+
+        res.status(200).json({ message: "Updated"});
+    } catch(error){
+        console.error(error);
+    }
+})
+
+app.get('/group/:id', async (req, res) => {
+    const id = parseInt(req.params.id);
+    const positions = await knex('group').select('*').where({ group_id: id});
+
+    if(positions){
+        res.status(200).send(positions);
+    }else{
+        res.status(404).json({message: "Could not find any positions"});
+    }
+})
+
 app.listen(8080, () => {
     console.log("Server running.");
 })

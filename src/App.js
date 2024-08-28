@@ -4,9 +4,12 @@ import { useEffect, useState } from 'react';
 import './App.css';
 import Login from './Login';
 import Board from './Board';
+import { DndProvider } from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
 
 function App() {
   const [userLoggedIn, setUserLoggedIn] = useState([]);
+  
   const [adminView, setAdminView] = useState(false);
   useEffect(() => {
     if(userLoggedIn.length > 0){
@@ -19,6 +22,7 @@ function App() {
 
   return (
     <div className="App">
+      <DndProvider backend={HTML5Backend}>
       <header onClick={() => {window.location.reload()}}>
         Fancy Task Checklist
       </header>
@@ -36,6 +40,7 @@ function App() {
         ):(null)}
 
       </div>
+      </DndProvider>
     </div>
   );
 }
