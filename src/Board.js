@@ -13,7 +13,9 @@ function Board({adminView, userId}) {
     const [isLoaded, setIsLoaded] = useState(false);
     const [newTaskVisible, setNewTaskVisible] = useState(false);
     const [currentItem, setCurrentItem] = useState(null);
-    const [gPosition, setGPosition] = useState({ left: 0, top: 0})
+    const [gPosition, setGPosition] = useState([]);
+
+    const defaultPos = {top: 10, left: 10};
 
     const [items, setItems] = useState([
         { id: 'item1', initialPosition: {top: 100, left: 100}},
@@ -40,15 +42,11 @@ function Board({adminView, userId}) {
         console.log(data);
         setIsLoaded(true); 
 
+        const groupUrl = `http://localhost:8080/group/`;
+        const gresponse = await fetch(groupUrl);
+        const gdata = await gresponse.json();
+        setGPosition(gdata)
         // groupedTasks.map(x => )
-    }
-
-    const fetchPositions = async( num ) => {
-        const url = `http://localhost:8080/group/${num}`;
-        const response = await fetch(url);
-        const data = await response.json();
-        setGPosition({left: data[0].posX, top: data[0].posY})
-        console.log("posdata:   ", data)
     }
 
     useEffect(() => {
@@ -82,8 +80,8 @@ function Board({adminView, userId}) {
                     <>
                         {Object.values(taskList).map((x, index) => <ListItem id={x.id} key={index} name={x.username} title={x.title} creator_id={x.creator_id} is_complete={x.is_complete} comments={x.comments} currentItem={currentItem} setCurrentItem={setCurrentItem} fetchData={fetchData}/>)}
                     </>) : (<>
-                        {Object.entries(groupedTasks).map(([group_id, tasks]) => (
-                            <Draggable key={group_id} id={group_id} initialPosition={items[group_id].initialPosition} onDrop={handleDrop} getPos={fetchPositions} pX={gPosition.left} pY={gPosition.top}>
+                        {gPosition.length && Object.entries(groupedTasks).map(([group_id, tasks]) => (
+                            <Draggable key={group_id} id={group_id} initialPosition={gPosition} onDrop={handleDrop} >
                                 <div key={group_id} className={`group-${group_id}`} >
                                     <h3>Group {group_id}</h3>
                                     {Object.values(tasks).map((x, index) => <ListItem id={x.id} key={index} title={x.title} is_complete={x.is_complete} comments={x.comments} currentItem={currentItem} setCurrentItem={setCurrentItem} fetchData={fetchData} />)}

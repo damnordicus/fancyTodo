@@ -74,7 +74,23 @@ app.post('/tasks/creator/:id', async (req, res) => {
     }
 
     try {
+        try{
+            const gCheck = await fetch(`http://localhost:8080/group`)
+            const data = await gCheck.json();
+            if (data.length < group_id) {
+                await fetch(`http://localhost:8080/group/${group_id}`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                });
+            }
+        }catch(error){
+            console.error(error);
+        }
+        
         await knex('tasks').insert({title: title, is_complete: false, creator_id: temp, group_id: group_id});
+
         res.status(200).json({message: "Added new task!"});
        
     }catch(error){
@@ -131,15 +147,28 @@ app.patch('/group/:id', async (req, res) => {
     }
 })
 
-app.get('/group/:id', async (req, res) => {
-    const id = parseInt(req.params.id);
-    const positions = await knex('group').select('*').where({ group_id: id});
+app.get('/group/', async (req, res) => {
+    //const id = parseInt(req.params.id);
+    const positions = await knex('group').select('*');//.where({ group_id: id});
 
     if(positions){
         res.status(200).send(positions);
     }else{
         res.status(404).json({message: "Could not find any positions"});
     }
+})
+
+app.post('/group/:id', async (req, res) => {
+    const gId = parseInt(req.params.id);
+
+    try{
+        await knex('group').insert({ group_id: gId, posX: 100, posY: 50});
+        res.status(200).json({message: "New group created."})
+
+    }catch(error){
+        console.error(error);
+    }
+
 })
 
 app.listen(8080, () => {
